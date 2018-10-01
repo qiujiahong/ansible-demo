@@ -1,0 +1,3 @@
+- debug:
+    msg: "开始安装redis" 
+

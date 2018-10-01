@@ -6,7 +6,7 @@
 [pms-web]
 192.168.3.90
 
-[pms_redis]
+[pms-redis]
 192.168.3.90
 
 [pms-mysql]

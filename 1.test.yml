@@ -1,4 +1,13 @@
+#  安装停车服务器
 - hosts: pms-web
   remote_user: root
   roles:
   - pms-web
+
+
+# 安装pms_redis
+- hosts: pms-redis
+  remote_user: root
+  roles:
+  - pms-redis
+
