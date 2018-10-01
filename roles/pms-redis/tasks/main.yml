@@ -1,3 +1,33 @@
 - debug:
-    msg: "开始安装redis" 
-
+    msg: "start to install redis." 
+- name: copy install files to  redis server
+  copy: 
+    src: ./down/redis/
+    dest: /tmp/redis/
+- name: install tools for redis
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - gcc
+    - automake
+    - autoconf
+    - libtool
+    - make
+- name: "unarchive redis file"
+  unarchive:
+    src: /tmp/redis/4.0.9.tar.gz
+    dest: /tmp/redis
+    remote_src: yes
+- name: "execute redis install."
+  shell: make && make PREFIX=/usr/local/redis install 
+  args:
+    chdir: /tmp/redis/redis-4.0.9 
+- name: create the path which the redis need. 
+  file: 
+    path: "{{ item }}"
+    state: directory
+  loop: 
+    - /etc/redis
+    - /opt/soft/redis/data
+    - /var/log/redis 

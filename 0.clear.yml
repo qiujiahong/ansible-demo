@@ -1,0 +1,26 @@
+#  清除redis数据
+- hosts: pms-redis
+  remote_user: root
+  tasks:
+  - name: remove install redis file 
+    file: 
+      path: "{{ item }}"
+      state: absent
+    loop: 
+      - /tmp/redis/
+      - /usr/local/redis
+      - /etc/redis
+      - /opt/soft/redis/data
+      - /var/log/redis 
+  # - name: install tools for redis
+  #   yum:
+  #     name: "{{ item }}"
+  #     state: removed    # 删除软件
+  #   loop:
+  #     - gcc
+  #     - automake
+  #     - autoconf
+  #     - libtool
+  #     - make
+
+      

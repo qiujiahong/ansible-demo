@@ -1,0 +1,5 @@
+# 安装pms_redis
+- hosts: pms-redis
+  remote_user: root
+  roles:
+  - pms-redis
