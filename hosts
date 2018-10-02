@@ -3,13 +3,13 @@
 # [webs]
 # web1
 
+[pms-mysql]
+192.168.3.90
+
 [pms-web]
 192.168.3.90
 
 [pms-redis]
-192.168.3.90
-
-[pms-mysql]
 192.168.3.90
 
 [wx-web]
@@ -21,6 +21,7 @@
 [all:vars]
 # ---------集群主要参数---------------
 
+## 1. redis 相关参数
 TEST="this is a test parameter"
 REDIS_MATER_IP=192.168.3.90
 QUORUM_NUM=2
@@ -30,6 +31,13 @@ REDIS_SLAVE2_PORT=6579
 REDIS_SENTINEL1_PORT=26379
 REDIS_SENTINEL2_PORT=26479
 REDIS_SENTINEL3_PORT=26579
+
+## 2. mysql安装相关
+MYSQL_IP=192.168.3.90
+MYSQL_PASSWORD=123456
+MYSQL_BASE_PATH=/home 
+MYSQL_DATAPATH=/home/data 
+MYSQL_PORT=3307
 
 
 

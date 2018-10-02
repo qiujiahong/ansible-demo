@@ -33,5 +33,13 @@
   #     - libtool
   #     - make
 
-
-      
+#  清除mysql数据
+- hosts: pms-mysql
+  remote_user: root
+  tasks:
+  - name: "remove mysql."
+    shell: "{{ item }}"
+    args:
+      chdir: /tmp/mysql
+    loop: 
+      - ./mysql.sh   --b={{ MYSQL_BASE_PATH }}  --d={{ MYSQL_DATAPATH }} remove

@@ -16,7 +16,7 @@
     - make
 - name: "unarchive redis file"
   unarchive:
-    src: /tmp/redis/4.0.9.tar.gz
+    src: /tmp/redis/redis-4.0.9.tar.gz 
     dest: /tmp/redis
     remote_src: yes
 - name: "execute redis install."
@@ -76,3 +76,20 @@
     - mv redis.service /lib/systemd/system/
     - systemctl enable redis.service  
     - systemctl start redis.service  
+- name: "Set firewall for redis ."
+  shell: "{{ item }}"
+  args:
+    chdir: /tmp/redis
+  loop: 
+    - firewall-cmd --zone=public --add-port={{ REDIS_MATER_PORT }}/tcp --permanent 
+    - firewall-cmd --zone=public --add-port={{ REDIS_SLAVE1_PORT }}/tcp --permanent 
+    - firewall-cmd --zone=public --add-port={{ REDIS_SLAVE2_PORT }}/tcp --permanent 
+    - firewall-cmd --zone=public --add-port={{ REDIS_SENTINEL1_PORT }}/tcp --permanent 
+    - firewall-cmd --zone=public --add-port={{ REDIS_SENTINEL2_PORT }}/tcp --permanent 
+    - firewall-cmd --zone=public --add-port={{ REDIS_SENTINEL3_PORT }}/tcp --permanent 
+    - firewall-cmd --reload
+
+ 
+
+
+    

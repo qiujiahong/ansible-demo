@@ -1,0 +1,5 @@
+# 安装mysql
+- hosts: pms-mysql
+  remote_user: root
+  roles:
+  - mysql

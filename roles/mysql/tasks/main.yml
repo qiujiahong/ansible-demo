@@ -1,0 +1,11 @@
+- name: copy install files to  mysql server
+  copy: 
+    src: ./down/mysql/
+    dest: /tmp/mysql/
+- name: "execute mysql install."
+  shell: "{{ item }}"
+  args:
+    chdir: /tmp/mysql/
+  loop: 
+    - chmod 760 mysql.sh
+    - ./mysql.sh  --pw={{ MYSQL_PASSWORD }} --b={{ MYSQL_BASE_PATH }}  --d={{ MYSQL_DATAPATH }} --pt={{ MYSQL_PORT }} install
