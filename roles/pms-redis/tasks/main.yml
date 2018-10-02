@@ -66,6 +66,13 @@
     - echo "PATH=\$PATH:/usr/local/redis/bin/" >> ~/.bash_profile 
     - echo "export PATH" >> ~/.bash_profile 
     - source ~/.bash_profile 
-
-
-    
+- name: "Set redis Powerboot."
+  shell: "{{ item }}"
+  args:
+    chdir: /tmp/redis
+  loop: 
+    - chmod 760 redis.sh 
+    - mv redis.sh /usr/local/bin/
+    - mv redis.service /lib/systemd/system/
+    - systemctl enable redis.service  
+    - systemctl start redis.service  

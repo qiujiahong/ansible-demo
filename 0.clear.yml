@@ -12,6 +12,7 @@
       - /etc/redis
       - /data
       - /var/log/redis 
+      - /usr/local/bin/redis.sh
   - name: "Recover .bash_profile."
     shell: "{{ item }}"
     loop: 
