@@ -10,7 +10,7 @@
       - /tmp/redis/
       - /usr/local/redis
       - /etc/redis
-      - /opt/soft/redis/data
+      - /data
       - /var/log/redis 
   - name: "Recover .bash_profile."
     shell: "{{ item }}"
@@ -19,6 +19,8 @@
       - sed -i '/redis/d' ~/.bash_profile 
       - echo "export PATH" >> ~/.bash_profile 
       - source ~/.bash_profile 
+      - ps -ef | grep redis-serve | grep -v grep | awk '{print $2}'|xargs --no-run-if-empty kill -9
+      - ps -ef | grep redis-sentinel | grep -v grep | awk '{print $2}'|xargs --no-run-if-empty kill -9
   # - name: install tools for redis
   #   yum:
   #     name: "{{ item }}"

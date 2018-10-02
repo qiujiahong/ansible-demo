@@ -29,7 +29,7 @@
     state: directory
   loop: 
     - /etc/redis
-    - /opt/soft/redis/data
+    - /data
     - /var/log/redis 
 - name: "prepare redis file."
   shell: "{{ item }}"
@@ -47,17 +47,17 @@
     - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" slave2.conf
     - echo "slaveof {{ REDIS_MATER_IP }} {{ REDIS_MATER_PORT }}" >> slave2.conf
     - cp slave2.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE2_PORT }}/g" sentinel_template.conf  > sentinel1.conf
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel1.conf
     - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel1.conf
     - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL1_PORT }}/g" sentinel1.conf
     - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel1.conf
     - cp sentinel1.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE2_PORT }}/g" sentinel_template.conf  > sentinel2.conf
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel2.conf
     - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel2.conf
     - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL2_PORT }}/g" sentinel2.conf
     - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel2.conf
     - cp sentinel2.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE2_PORT }}/g" sentinel_template.conf  > sentinel3.conf
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel3.conf
     - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel3.conf
     - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL3_PORT }}/g" sentinel3.conf
     - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel3.conf
