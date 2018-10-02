@@ -12,6 +12,13 @@
       - /etc/redis
       - /opt/soft/redis/data
       - /var/log/redis 
+  - name: "Recover .bash_profile."
+    shell: "{{ item }}"
+    loop: 
+      - sed -i '/export/d' ~/.bash_profile 
+      - sed -i '/redis/d' ~/.bash_profile 
+      - echo "export PATH" >> ~/.bash_profile 
+      - source ~/.bash_profile 
   # - name: install tools for redis
   #   yum:
   #     name: "{{ item }}"
@@ -22,5 +29,6 @@
   #     - autoconf
   #     - libtool
   #     - make
+
 
       
