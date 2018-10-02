@@ -36,6 +36,14 @@
   args:
     chdir: /tmp/redis
   loop: 
-    - sed "s/6379/{{ REDIS_MATER_PORT }}/g" master_template.conf  > master.conf
-    - sed -i "s/127.0.0.1/{{ REDIS_MATER_IP }}/g" master.conf
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" master_template.conf  > master.conf
+    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" master.conf
     - cp master.conf /etc/redis/
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE1_PORT }}/g" master_template.conf  > slave1.conf
+    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" slave1.conf
+    - echo "slaveof {{ REDIS_MATER_IP }} {{ REDIS_MATER_PORT }}" >> slave1.conf
+    - cp slave1.conf /etc/redis/
+    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE2_PORT }}/g" master_template.conf  > slave2.conf
+    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" slave2.conf
+    - echo "slaveof {{ REDIS_MATER_IP }} {{ REDIS_MATER_PORT }}" >> slave2.conf
+    - cp slave2.conf /etc/redis/
