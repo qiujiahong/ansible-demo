@@ -31,3 +31,11 @@
     - /etc/redis
     - /opt/soft/redis/data
     - /var/log/redis 
+- name: "prepare redis file."
+  shell: "{{ item }}"
+  args:
+    chdir: /tmp/redis
+  loop: 
+    - sed "s/6379/{{ REDIS_MATER_PORT }}/g" master_template.conf  > master.conf
+    - sed -i "s/127.0.0.1/{{ REDIS_MATER_IP }}/g" master.conf
+    - cp master.conf /etc/redis/

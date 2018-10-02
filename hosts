@@ -22,3 +22,5 @@
 # ---------集群主要参数---------------
 
 TEST="this is a test parameter"
+REDIS_MATER_IP=192.168.3.90
+REDIS_MATER_PORT=6379
