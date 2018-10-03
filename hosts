@@ -24,7 +24,7 @@
 ## 1. redis 相关参数
 TEST="this is a test parameter"
 REDIS_MATER_IP=192.168.3.90
-QUORUM_NUM=2
+QUORUM_NUM=2                # 哨兵个数/2，取整数 +1
 REDIS_MATER_PORT=6379
 REDIS_SLAVE1_PORT=6479
 REDIS_SLAVE2_PORT=6579

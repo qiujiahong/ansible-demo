@@ -1,10 +1,28 @@
-- debug:
-    msg: "start to install redis." 
+- name: -redis- Create the path which the redis need. 
+  file: 
+    path: "{{ item }}"
+    state: directory
+  loop: 
+    - /etc/redis
+    - /data
+    - /var/log/redis 
+- name: -redis- 创建主节点配置文件
+  template: src=master.conf.j2 dest=/etc/redis/master.conf
+- name: -redis- 创建从节点1配置文件
+  template: src=slave1.conf.j2 dest=/etc/redis/slave1.conf
+- name: -redis- 创建从节点2配置文件
+  template: src=slave2.conf.j2 dest=/etc/redis/slave2.conf
+- name: -redis- 创建sentinel 1 配置文件
+  template: src=sentinel1.conf.j2 dest=/etc/redis/sentinel1.conf
+- name: -redis- 创建sentinel 2 配置文件
+  template: src=sentinel2.conf.j2 dest=/etc/redis/sentinel2.conf
+- name: -redis- 创建sentinel 3 配置文件
+  template: src=sentinel3.conf.j2 dest=/etc/redis/sentinel3.conf
 - name: copy install files to  redis server
   copy: 
     src: ./down/redis/
     dest: /tmp/redis/
-- name: install tools for redis
+- name: -redis- 安装必要工具
   yum:
     name: "{{ item }}"
     state: latest
@@ -14,7 +32,7 @@
     - autoconf
     - libtool
     - make
-- name: "unarchive redis file"
+- name: "-redis- 解压redis安装包"
   unarchive:
     src: /tmp/redis/redis-4.0.9.tar.gz 
     dest: /tmp/redis
@@ -23,50 +41,14 @@
   shell: make && make PREFIX=/usr/local/redis install 
   args:
     chdir: /tmp/redis/redis-4.0.9 
-- name: create the path which the redis need. 
-  file: 
-    path: "{{ item }}"
-    state: directory
-  loop: 
-    - /etc/redis
-    - /data
-    - /var/log/redis 
-- name: "prepare redis file."
+- name: "-redis- 设置redis环境变量."
   shell: "{{ item }}"
-  args:
-    chdir: /tmp/redis
   loop: 
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" master_template.conf  > master.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" master.conf
-    - cp master.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE1_PORT }}/g" master_template.conf  > slave1.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" slave1.conf
-    - echo "slaveof {{ REDIS_MATER_IP }} {{ REDIS_MATER_PORT }}" >> slave1.conf
-    - cp slave1.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_SLAVE2_PORT }}/g" master_template.conf  > slave2.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" slave2.conf
-    - echo "slaveof {{ REDIS_MATER_IP }} {{ REDIS_MATER_PORT }}" >> slave2.conf
-    - cp slave2.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel1.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel1.conf
-    - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL1_PORT }}/g" sentinel1.conf
-    - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel1.conf
-    - cp sentinel1.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel2.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel2.conf
-    - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL2_PORT }}/g" sentinel2.conf
-    - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel2.conf
-    - cp sentinel2.conf /etc/redis/
-    - sed "s/REDIS_MATER_PORT/{{ REDIS_MATER_PORT }}/g" sentinel_template.conf  > sentinel3.conf
-    - sed -i "s/REDIS_MATER_IP/{{ REDIS_MATER_IP }}/g" sentinel3.conf
-    - sed -i "s/REDIS_SENTINEL1_PORT/{{ REDIS_SENTINEL3_PORT }}/g" sentinel3.conf
-    - sed -i "s/QUORUM_NUM/{{ QUORUM_NUM }}/g" sentinel3.conf
-    - cp sentinel3.conf /etc/redis/
     - sed -i '/export/d' ~/.bash_profile 
     - echo "PATH=\$PATH:/usr/local/redis/bin/" >> ~/.bash_profile 
     - echo "export PATH" >> ~/.bash_profile 
     - source ~/.bash_profile 
-- name: "Set redis Powerboot."
+- name: "-redis- 设置redis开机启动."
   shell: "{{ item }}"
   args:
     chdir: /tmp/redis
@@ -76,7 +58,7 @@
     - mv redis.service /lib/systemd/system/
     - systemctl enable redis.service  
     - systemctl start redis.service  
-- name: "Set firewall for redis ."
+- name: "-redis- 设置redis防火墙."
   shell: "{{ item }}"
   args:
     chdir: /tmp/redis
@@ -89,7 +71,3 @@
     - firewall-cmd --zone=public --add-port={{ REDIS_SENTINEL3_PORT }}/tcp --permanent 
     - firewall-cmd --reload
 
- 
-
-
-    

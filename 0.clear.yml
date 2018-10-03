@@ -40,6 +40,9 @@
   - name: "remove mysql."
     shell: "{{ item }}"
     args:
-      chdir: /tmp/mysql
+      chdir: /tmp/
     loop: 
+      - cd mysql
       - ./mysql.sh   --b={{ MYSQL_BASE_PATH }}  --d={{ MYSQL_DATAPATH }} remove
+      - cd ../
+      - rm -rf mysql

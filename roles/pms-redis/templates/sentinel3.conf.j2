@@ -1,0 +1,8 @@
+port {{ REDIS_SENTINEL3_PORT }}
+protected-mode no
+daemonize yes
+dir "/data"
+logfile "/var/log/redis/{{ REDIS_SENTINEL3_PORT }}.log"
+sentinel monitor mymaster {{ REDIS_MATER_IP }}  {{ REDIS_MATER_PORT }} {{ QUORUM_NUM }}
+sentinel failover-timeout mymaster 60000
+sentinel down-after-milliseconds mymaster 10000

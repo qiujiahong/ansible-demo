@@ -1,3 +1,5 @@
+- name: 创建etcd证书请求
+  template: src=etcd-csr.json.j2 dest=/etc//ssl/etcd-csr.json
 - name: copy install files to  mysql server
   copy: 
     src: ./down/mysql/
